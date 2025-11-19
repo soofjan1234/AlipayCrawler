@@ -5,7 +5,7 @@ import re
 import pandas as pd
 from datetime import datetime
 from docx import Document
-from docx.shared import Pt
+from docx.shared import Pt, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml.shared import OxmlElement, qn
 import os
@@ -165,6 +165,13 @@ class BilibiliDataExporter:
             content_para = doc.add_paragraph()
             content_para.add_run('【文案内容】').bold = True
             content_para.add_run(f' {item.get("text_content", "")}')
+            
+            # 添加统计数据
+            stats_para = doc.add_paragraph()
+            stats_para.add_run('【统计数据】').bold = True
+            stats_run = stats_para.add_run(f' 点赞：{item.get("like_count", 0)} | 评论：{item.get("comment_count", 0)} | 转发：{item.get("repost_count", 0)}')
+            stats_run.font.size = Pt(10)
+            stats_run.font.color.rgb = RGBColor(128, 128, 128)  # 灰色字体
             
             # 如果有视频链接，添加视频链接
             if item.get('video_link'):

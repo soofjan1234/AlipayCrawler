@@ -5,7 +5,7 @@
 
 import pandas as pd
 from docx import Document
-from docx.shared import Pt
+from docx.shared import Pt, RGBColor
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 from datetime import datetime
 import os
@@ -283,6 +283,17 @@ class DouyinDataExporter:
                     text_para = doc.add_paragraph()
                     text_run = text_para.add_run(f"【文案内容】{content_text}")
                     text_run.font.size = Pt(11)
+                
+                # 添加统计数据
+                like_count = item.get("like_count", 0)
+                comment_count = item.get("comment_count", 0)
+                share_count = item.get("share_count", 0)
+                
+                # 统计信息
+                stats_para = doc.add_paragraph()
+                stats_run = stats_para.add_run(f"【统计数据】点赞：{like_count} | 评论：{comment_count} | 转发：{share_count}")
+                stats_run.font.size = Pt(10)
+                stats_run.font.color.rgb = RGBColor(128, 128, 128)  # 灰色字体
                 
                 # 添加空行分隔
                 doc.add_paragraph()

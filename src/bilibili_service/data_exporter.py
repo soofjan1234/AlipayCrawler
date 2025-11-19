@@ -5,7 +5,7 @@
 
 import pandas as pd
 from docx import Document
-from docx.shared import Pt
+from docx.shared import Pt, RGBColor
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 from datetime import datetime
 import os
@@ -152,6 +152,17 @@ class DataExporter:
                             text_para = doc.add_paragraph()
                             text_run = text_para.add_run(f"【文案内容】{text_content}")
                             text_run.font.size = Pt(11)
+                        
+                        # 添加统计数据
+                        like_count = self._extract_number(content.get("点赞数", "0"))
+                        comment_count = self._extract_number(content.get("评论数", "0"))
+                        repost_count = self._extract_number(content.get("转发数", "0"))
+                        
+                        # 统计信息
+                        stats_para = doc.add_paragraph()
+                        stats_run = stats_para.add_run(f"【统计数据】点赞：{like_count} | 评论：{comment_count} | 转发：{repost_count}")
+                        stats_run.font.size = Pt(10)
+                        stats_run.font.color.rgb = RGBColor(128, 128, 128)  # 灰色字体
                         
                         # 如果是视频，添加视频描述
                         if content.get("内容类型") == "视频":
